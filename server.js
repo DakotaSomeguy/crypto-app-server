@@ -63,6 +63,26 @@ app.post('/api/my-tokens', async (req, res) => {
     }
   });
 
+// Route for deleting a token
+app.delete('/api/my-tokens/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      // Use findByIdAndDelete to find and delete the token by its ID
+      const deletedToken = await Token.findByIdAndDelete(id);
+  
+      if (!deletedToken) {
+        // Token not found, return a response indicating the absence
+        return res.status(404).json({ error: 'Token not found' });
+      }
+  
+      res.json({ message: 'Token deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
